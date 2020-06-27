@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{291C6E16-5EF6-4649-A687-2806336A3D99}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C5054900-B3E3-4EA6-97F7-DB7DF5EBDA1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Investec.OpenBanking.RestClient", "src\Investec.OpenBanking.RestClient\Investec.OpenBanking.RestClient.csproj", "{7EFB83F8-D0A1-4EF1-87A8-3061CC108B62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "tests\IntegrationTests\IntegrationTests.csproj", "{9C67BDF0-BDA4-4865-81CF-362F34FFA977}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7EFB83F8-D0A1-4EF1-87A8-3061CC108B62} = {291C6E16-5EF6-4649-A687-2806336A3D99}
+		{9C67BDF0-BDA4-4865-81CF-362F34FFA977} = {C5054900-B3E3-4EA6-97F7-DB7DF5EBDA1A}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7EFB83F8-D0A1-4EF1-87A8-3061CC108B62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EFB83F8-D0A1-4EF1-87A8-3061CC108B62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EFB83F8-D0A1-4EF1-87A8-3061CC108B62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EFB83F8-D0A1-4EF1-87A8-3061CC108B62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C67BDF0-BDA4-4865-81CF-362F34FFA977}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C67BDF0-BDA4-4865-81CF-362F34FFA977}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C67BDF0-BDA4-4865-81CF-362F34FFA977}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C67BDF0-BDA4-4865-81CF-362F34FFA977}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
