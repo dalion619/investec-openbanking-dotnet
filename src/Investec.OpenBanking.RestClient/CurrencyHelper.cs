@@ -3,7 +3,10 @@ using Newtonsoft.Json;
 
 namespace Investec.OpenBanking.RestClient
 {
-    public static class CurrencyHelper
+  /// <summary>
+  ///     Helper class with basic information on various currencies
+  /// </summary>
+  public static class CurrencyHelper
     {
         private static string CurrenciesJson => @"[
   {
@@ -206,15 +209,36 @@ namespace Investec.OpenBanking.RestClient
   }
 ]";
 
+        /// <summary>
+        ///     Returns a collection currencies with their basic information
+        /// </summary>
         public static IReadOnlyList<CurrencyModel> GetCurrencies =>
             JsonConvert.DeserializeObject<List<CurrencyModel>>(CurrenciesJson);
     }
 
-    public class CurrencyModel
+  /// <summary>
+  ///     Currency model
+  /// </summary>
+  public class CurrencyModel
     {
-        public string ISO3 { get; set; }
-        public string Name { get; set; }
-        public string Symbol { get; set; }
-        public int DecimalPoints { get; set; }
+      /// <summary>
+      ///     Currency ISO 4217 Alpha-3 code
+      /// </summary>
+      public string ISO3 { get; set; }
+
+      /// <summary>
+      ///     Currency name
+      /// </summary>
+      public string Name { get; set; }
+
+      /// <summary>
+      ///     Currency symbol
+      /// </summary>
+      public string Symbol { get; set; }
+
+      /// <summary>
+      ///     Currency decimal points/places
+      /// </summary>
+      public int DecimalPoints { get; set; }
     }
 }

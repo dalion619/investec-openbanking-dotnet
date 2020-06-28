@@ -7,6 +7,10 @@ using Investec.OpenBanking.RestClient.ResponseModels;
 
 namespace Investec.OpenBanking.RestClient
 {
+    /// <summary>
+    ///     This class allows the bearer token to be inserted into Authorization Header of the request made by the HttpClient
+    ///     instance
+    /// </summary>
     public class AuthenticatedHttpClientHandler : HttpClientHandler
     {
         private readonly Func<Task<AccessTokenResponseModel>> _getAccessToken;
