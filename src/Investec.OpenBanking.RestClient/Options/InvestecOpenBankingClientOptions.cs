@@ -25,6 +25,11 @@ namespace Investec.OpenBanking.RestClient.Options
         /// </summary>
         public List<string> Scopes { get; set; }
 
+        /// <summary>
+        ///     Enable transaction classification feature, defaults to false
+        /// </summary>
+        public bool EnableTransactionClassification { get; set; }
+
         InvestecOpenBankingClientOptions IOptions<InvestecOpenBankingClientOptions>.Value => this;
     }
 }

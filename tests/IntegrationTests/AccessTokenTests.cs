@@ -13,7 +13,7 @@ namespace IntegrationTests
                 {
                     ClientId = Constants.ClientId,
                     ClientSecret = Constants.ClientSecret
-                });
+                },new ClassificationService());
 
         private readonly InvestecOpenBankingClient _investecOpenBankingClient;
 

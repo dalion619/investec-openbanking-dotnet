@@ -32,6 +32,7 @@ namespace Investec.OpenBanking.RestClient.Extensions
 
             services.AddOptions();
             services.Configure(setupAction);
+            services.Add(ServiceDescriptor.Singleton<IClassificationService, ClassificationService>());
             services.Add(ServiceDescriptor.Singleton<IInvestecOpenBankingClient, InvestecOpenBankingClient>());
 
             return services;

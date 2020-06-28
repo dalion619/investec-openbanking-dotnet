@@ -32,6 +32,7 @@ namespace Investec.OpenBanking.RestClient.ResponseModels.Accounts
             public string postingDate { get; set; }
             public string valueDate { get; set; }
             public string actionDate { get; set; }
+            public TransactionClassification classification { get; set; }
             public decimal amount { get; set; }
             public DateTime postingDateTime => DateTime.Parse(postingDate);
             public DateTime valueDateTime => DateTime.Parse(valueDate);
@@ -66,6 +67,14 @@ namespace Investec.OpenBanking.RestClient.ResponseModels.Accounts
                     return TransactionTypes.Unknown;
                 }
             }
+        }
+
+        public class TransactionClassification
+        {
+            public string merchant { get; set; }
+            public string category { get; set; }
+            public string wiki_code { get; set; }
+            public CountryModel countryModel { get; set; }
         }
     }
 }
