@@ -10,6 +10,6 @@ namespace Investec.OpenBanking.RestClient.ResponseModels
         public string scope { get; set; }
         public DateTime valid_from => DateTime.UtcNow;
         public DateTime valid_to => DateTime.UtcNow.AddSeconds(expires_in);
-        public TimeSpan ttl => valid_to - valid_from;
+        public TimeSpan ttl => valid_to - DateTime.UtcNow;
     }
 }
