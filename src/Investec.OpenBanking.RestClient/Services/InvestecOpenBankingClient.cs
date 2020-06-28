@@ -15,6 +15,9 @@ using Refit;
 
 namespace Investec.OpenBanking.RestClient.Services
 {
+    /// <summary>
+    ///     REST client for interacting with Investec's Open Banking aligned Open APIs
+    /// </summary>
     public class InvestecOpenBankingClient : IInvestecOpenBankingClient
     {
         private readonly HttpClient _httpClient;
@@ -39,9 +42,23 @@ namespace Investec.OpenBanking.RestClient.Services
             _accountsEndpoint = RestService.For<IAccounts>(_httpClient);
         }
 
+        /// <summary>
+        ///     /identity/
+        /// </summary>
         private IIdentity _identityEndpoint { get; }
+
+        /// <summary>
+        ///     /za/pb/v1/accounts
+        /// </summary>
         private IAccounts _accountsEndpoint { get; }
 
+        /// <summary>
+        ///     POST /identity/v2/oauth2/token
+        ///     Obtain an access token
+        /// </summary>
+        /// <returns>
+        ///     Access Token Response   <see cref="Investec.OpenBanking.RestClient.ResponseModels.AccessTokenResponseModel" />
+        /// </returns>
         public async Task<AccessTokenResponseModel> GetAccessToken()
         {
             try
@@ -61,6 +78,14 @@ namespace Investec.OpenBanking.RestClient.Services
             return null;
         }
 
+        /// <summary>
+        ///     POST /za/pb/v1/accounts
+        ///     Obtain a list of accounts.
+        /// </summary>
+        /// <returns>
+        ///     Accounts Response Model
+        ///     <see cref="Investec.OpenBanking.RestClient.ResponseModels.Accounts.AccountsResponseModel" />
+        /// </returns>
         public async Task<BaseResponseModel<AccountsResponseModel>> GetAccounts()
         {
             try
@@ -75,6 +100,15 @@ namespace Investec.OpenBanking.RestClient.Services
             return new BaseResponseModel<AccountsResponseModel>(new AccountsResponseModel());
         }
 
+        /// <summary>
+        ///     POST /za/pb/v1/accounts{accountId}/transactions
+        ///     Obtain a specified account's transactions.
+        /// </summary>
+        /// <param name="accountId">Account identifier</param>
+        /// <returns>
+        ///     Account Transactions Response
+        ///     <see cref="Investec.OpenBanking.RestClient.ResponseModels.Accounts.AccountTransactionsResponseModel" />
+        /// </returns>
         public async Task<BaseResponseModel<AccountTransactionsResponseModel>> GetAccountTransactions(string accountId)
         {
             try
@@ -89,6 +123,15 @@ namespace Investec.OpenBanking.RestClient.Services
             return new BaseResponseModel<AccountTransactionsResponseModel>(new AccountTransactionsResponseModel());
         }
 
+        /// <summary>
+        ///     POST /za/pb/v1/accounts{accountId}/balance
+        ///     Obtain a specified account's balance.
+        /// </summary>
+        /// <param name="accountId">Account identifier</param>
+        /// <returns>
+        ///     Account Balance Response
+        ///     <see cref="Investec.OpenBanking.RestClient.ResponseModels.Accounts.AccountBalanceResponseModel" />
+        /// </returns>
         public async Task<BaseResponseModel<AccountBalanceResponseModel>> GetAccountBalance(string accountId)
         {
             try
