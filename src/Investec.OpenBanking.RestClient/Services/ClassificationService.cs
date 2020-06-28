@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using AngleSharp;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
+using Investec.OpenBanking.RestClient.Extensions;
 using Investec.OpenBanking.RestClient.Interfaces;
+using Investec.OpenBanking.RestClient.ResponseModels.Accounts;
 using Newtonsoft.Json;
 
 namespace Investec.OpenBanking.RestClient.Services
@@ -85,6 +87,161 @@ namespace Investec.OpenBanking.RestClient.Services
             }
 
             return new List<ClassificationOverrideModel>();
+        }
+
+        public async Task<List<AccountTransactionsResponseModel.TransactionResponse>> ClassifyTransactions(
+            List<AccountTransactionsResponseModel.TransactionResponse> transactions)
+        {
+            var classificationOverrides = await GetClassificationOverrides();
+            foreach (var transaction in transactions)
+            {
+                try
+                {
+                    var classification = new AccountTransactionsResponseModel.TransactionClassification();
+                    if (string.IsNullOrEmpty(transaction.cardNumber))
+                    {
+                        classification.merchant = "Investec";
+                        classification.countryModel =
+                            CountryHelper.GetCountries.FirstOrDefault(f =>
+                                string.Equals(f.ISO2, "ZA", StringComparison.InvariantCultureIgnoreCase));
+                        if (transaction.transactionType == AccountTransactionsResponseModel.TransactionTypes.Credit)
+                        {
+                            classification.category = "Bank Transfer";
+                        }
+                        else
+                        {
+                            classification.category = "Bank Fee";
+                        }
+
+                        transaction.classification = classification;
+                    }
+                    else
+                    {
+                        var descriptionOverrides = classificationOverrides.Where(w =>
+                            string.Equals(w.Lookup, "description", StringComparison.InvariantCultureIgnoreCase));
+                        foreach (var item in descriptionOverrides)
+                        {
+                            classification = await ApplyOverride(item, transaction.description, classification);
+                        }
+
+                        var description = transaction.description;
+                        if (description.Contains("*"))
+                        {
+                            var index = description.IndexOf("*");
+                            description = description.Substring(index + 1).Trim();
+                        }
+
+                        var countryCode = description.Substring(description.Length - 2);
+                        classification.countryModel =
+                            CountryHelper.GetCountries.FirstOrDefault(f =>
+                                string.Equals(f.ISO2, countryCode,
+                                    StringComparison.InvariantCultureIgnoreCase));
+
+                        var descriptionsParts = description
+                                                .Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries)
+                                                .ToList();
+                        if (string.IsNullOrEmpty(classification.merchant))
+                        { 
+                            switch (descriptionsParts.Count)
+                            {
+                                case 6:
+                                    classification.merchant = $"{descriptionsParts[0]} {descriptionsParts[1]} {descriptionsParts[2]}".Trim();
+                                    break;
+                                case 5:
+                                    classification.merchant = $"{descriptionsParts[0]} {descriptionsParts[1]}".Trim();
+                                    break;
+                                default:
+                                    classification.merchant = descriptionsParts[0].Trim();
+                                    break;
+                            }
+                        }
+                        
+                        var merchantOverrides = classificationOverrides.Where(w =>
+                            string.Equals(w.Lookup, "merchant", StringComparison.InvariantCultureIgnoreCase));
+                        foreach (var item in merchantOverrides)
+                        {
+                            classification = await ApplyOverride(item,classification.merchant, classification);
+                        }
+
+                        classification.wiki_code = classification.merchant.SentenceCase().Replace(" ", "_");
+                        var existingClassification = transactions
+                            .FirstOrDefault(f => f.classification != null && string.Equals(f.classification.wiki_code,
+                                classification.wiki_code,
+                                StringComparison.InvariantCultureIgnoreCase))?.classification;
+                        if (existingClassification != null)
+                        {
+                            transaction.classification = existingClassification;
+                            continue;
+                        }
+
+                        if (string.IsNullOrEmpty(classification.category))
+                        {
+                            classification.category = await LookupCategory(classification.wiki_code);
+                        }
+                        
+                        var categoryOverrides = classificationOverrides.Where(w =>
+                            string.Equals(w.Lookup, "category", StringComparison.InvariantCultureIgnoreCase));
+                        foreach (var item in categoryOverrides)
+                        {
+                            classification = await ApplyOverride(item, classification.category, classification);
+                        }
+
+                        transaction.classification = classification;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                }
+            }
+
+            return transactions;
+        }
+
+        private async Task<AccountTransactionsResponseModel.TransactionClassification> ApplyOverride(
+            ClassificationOverrideModel overrideModel, string input,
+            AccountTransactionsResponseModel.TransactionClassification classification)
+        {
+            try
+            {
+                var newValue = "";
+                switch (overrideModel.Type)
+                {
+                    case ClassificationOverrideModel.OverrideType.Equals:
+                        if (string.Equals(input, overrideModel.Value, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            newValue = overrideModel.Replace;
+                        }
+
+                        break;
+                    case ClassificationOverrideModel.OverrideType.Contains:
+                        if (input.ToLower().Contains(overrideModel.Value.ToLower()))
+                        {
+                            newValue = overrideModel.Replace;
+                        }
+                        break;
+                }
+
+                if (!string.IsNullOrEmpty(newValue))
+                {
+                    switch (overrideModel.Property.ToLower())
+                    {
+                        case "merchant":
+                            classification.merchant = newValue;
+                            break;
+                        case "category":
+                            classification.category = newValue;
+                            break;
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+
+            return classification;
         }
     }
 

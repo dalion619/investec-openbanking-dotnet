@@ -1764,7 +1764,7 @@ namespace Investec.OpenBanking.RestClient
         /// <summary>
         ///     Returns a collection countries with their basic information
         /// </summary>
-        public static IReadOnlyList<CountryModel> GetCurrencies =>
+        public static IReadOnlyList<CountryModel> GetCountries =>
             JsonConvert.DeserializeObject<List<CountryModel>>(CountriesJson);
     }
 

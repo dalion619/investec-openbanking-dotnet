@@ -11,6 +11,7 @@ using Investec.OpenBanking.RestClient.RequestModels;
 using Investec.OpenBanking.RestClient.ResponseModels;
 using Investec.OpenBanking.RestClient.ResponseModels.Accounts;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Refit;
 
 namespace Investec.OpenBanking.RestClient.Services
@@ -22,8 +23,9 @@ namespace Investec.OpenBanking.RestClient.Services
     {
         private readonly HttpClient _httpClient;
         private readonly InvestecOpenBankingClientOptions _options;
+        private readonly IClassificationService _classificationService;
 
-        public InvestecOpenBankingClient(IOptions<InvestecOpenBankingClientOptions> optionsAccessor)
+        public InvestecOpenBankingClient(IOptions<InvestecOpenBankingClientOptions> optionsAccessor, IClassificationService classificationService)
         {
             if (optionsAccessor == null)
             {
@@ -31,6 +33,7 @@ namespace Investec.OpenBanking.RestClient.Services
             }
 
             _options = optionsAccessor.Value;
+            _classificationService = classificationService;
             _httpClient = new HttpClient(
                               new AuthenticatedHttpClientHandler(GetAccessToken))
                           {
@@ -113,7 +116,13 @@ namespace Investec.OpenBanking.RestClient.Services
         {
             try
             {
-                return await _accountsEndpoint.GetTransactions(accountId);
+                var transactions = await _accountsEndpoint.GetTransactions(accountId);
+                if (_options.EnableTransactionClassification)
+                {
+                    transactions.data.transactions = await _classificationService.ClassifyTransactions(transactions.data.transactions);
+                }
+
+                return transactions;
             }
             catch (Exception e)
             {
