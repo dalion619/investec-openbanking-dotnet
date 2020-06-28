@@ -35,3 +35,4 @@ global.json
 .idea/
 *.dat
 *.toml
+classification-override.json
