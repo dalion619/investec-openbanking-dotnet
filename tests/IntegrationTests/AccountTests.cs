@@ -15,7 +15,6 @@ namespace IntegrationTests
                 {
                     ClientId = Constants.ClientId,
                     ClientSecret = Constants.ClientSecret,
-                    EnableTransactionClassification = true,
                 },new ClassificationService());
 
         private readonly InvestecOpenBankingClient _investecOpenBankingClient;
