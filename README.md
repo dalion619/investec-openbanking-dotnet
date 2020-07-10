@@ -23,3 +23,6 @@ Interact with the required endpoints.
 ```c#
 var accounts = await investecOpenBankingClient.GetAccounts();
 ```
+
+## Examples
+Check the [examples directory](https://github.com/dalion619/investec-openbanking-dotnet/tree/master/examples/) for projects using the client.
