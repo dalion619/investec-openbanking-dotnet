@@ -24,7 +24,7 @@ namespace Polling.Example.Func
         {
             try
             {
-                // Get exising transactions from database, filesystem etc.
+                // Get existing transactions from database, filesystem etc.
                 var existingTransactionsInDataStore = new List<Guid>();
 
                 if (existingTransactionsInDataStore.Any())
@@ -44,7 +44,7 @@ namespace Polling.Example.Func
                         var notification = new NotificationModel(transaction);
                         // Serialise model to JSON
                         var json = JsonConvert.SerializeObject(notification);
-                        // MD5 hash the json then covert hash to a Guid
+                        // MD5 hash the JSON then covert hash to a Guid
                         var id = json.ToMd5Guid();
 
                         // Check if transaction has already been stored

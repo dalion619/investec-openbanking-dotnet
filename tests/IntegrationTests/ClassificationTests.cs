@@ -7,24 +7,21 @@ namespace IntegrationTests
 {
     public class ClassificationTests
     {
+        public ClassificationTests() => _classificationService = new ClassificationService();
+
         private readonly IClassificationService _classificationService;
 
-        public ClassificationTests()
-        {
-            _classificationService = new ClassificationService();
-        }
-        
-        [Fact]
-        public async Task ValidSingleCategory()
-        {
-            var category = await _classificationService.LookupCategory("Uber_Eats");
-            Assert.NotNull(category);
-        }
-         
         [Fact]
         public async Task ValidFirstCategory()
         {
             var category = await _classificationService.LookupCategory("Microsoft");
+            Assert.NotNull(category);
+        }
+
+        [Fact]
+        public async Task ValidSingleCategory()
+        {
+            var category = await _classificationService.LookupCategory("Uber_Eats");
             Assert.NotNull(category);
         }
     }

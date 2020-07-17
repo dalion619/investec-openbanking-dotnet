@@ -1,3 +1,4 @@
+using System.Net;
 using Investec.OpenBanking.RestClient.ResponseModels.Accounts;
 
 namespace Investec.OpenBanking.RestClient.ResponseModels
@@ -13,7 +14,7 @@ namespace Investec.OpenBanking.RestClient.ResponseModels
             accountId = transaction.accountId;
             type = transaction.type;
             status = transaction.status;
-            description = System.Net.WebUtility.HtmlDecode(transaction.description);
+            description = WebUtility.HtmlDecode(transaction.description);
             cardNumber = transaction.cardNumber;
             postingDate = transaction.postingDate;
             valueDate = transaction.valueDate;

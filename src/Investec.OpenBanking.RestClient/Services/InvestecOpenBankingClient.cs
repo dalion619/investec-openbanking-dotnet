@@ -11,7 +11,6 @@ using Investec.OpenBanking.RestClient.RequestModels;
 using Investec.OpenBanking.RestClient.ResponseModels;
 using Investec.OpenBanking.RestClient.ResponseModels.Accounts;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Refit;
 
 namespace Investec.OpenBanking.RestClient.Services
@@ -21,11 +20,12 @@ namespace Investec.OpenBanking.RestClient.Services
     /// </summary>
     public class InvestecOpenBankingClient : IInvestecOpenBankingClient
     {
+        private readonly IClassificationService _classificationService;
         private readonly HttpClient _httpClient;
         private readonly InvestecOpenBankingClientOptions _options;
-        private readonly IClassificationService _classificationService;
 
-        public InvestecOpenBankingClient(IOptions<InvestecOpenBankingClientOptions> optionsAccessor, IClassificationService classificationService)
+        public InvestecOpenBankingClient(IOptions<InvestecOpenBankingClientOptions> optionsAccessor,
+                                         IClassificationService classificationService)
         {
             if (optionsAccessor == null)
             {
