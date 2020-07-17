@@ -24,7 +24,7 @@ namespace Polling.Example.Func
         {
             try
             {
-                // Get exising transactions from database, filesystem etc.
+                // Get existing transactions from database, filesystem etc.
                 var existingTransactionsInDataStore = new List<Guid>();
 
                 if (existingTransactionsInDataStore.Any())
