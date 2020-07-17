@@ -138,14 +138,15 @@ namespace Investec.OpenBanking.RestClient.Services
                                     StringComparison.InvariantCultureIgnoreCase));
 
                         var descriptionsParts = description
-                                                .Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries)
+                                                .Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries)
                                                 .ToList();
                         if (string.IsNullOrEmpty(classification.merchant))
-                        { 
+                        {
                             switch (descriptionsParts.Count)
                             {
                                 case 6:
-                                    classification.merchant = $"{descriptionsParts[0]} {descriptionsParts[1]} {descriptionsParts[2]}".Trim();
+                                    classification.merchant =
+                                        $"{descriptionsParts[0]} {descriptionsParts[1]} {descriptionsParts[2]}".Trim();
                                     break;
                                 case 5:
                                     classification.merchant = $"{descriptionsParts[0]} {descriptionsParts[1]}".Trim();
@@ -155,19 +156,20 @@ namespace Investec.OpenBanking.RestClient.Services
                                     break;
                             }
                         }
-                        
+
                         var merchantOverrides = classificationOverrides.Where(w =>
                             string.Equals(w.Lookup, "merchant", StringComparison.InvariantCultureIgnoreCase));
                         foreach (var item in merchantOverrides)
                         {
-                            classification = await ApplyOverride(item,classification.merchant, classification);
+                            classification = await ApplyOverride(item, classification.merchant, classification);
                         }
 
                         classification.wiki_code = classification.merchant.SentenceCase().Replace(" ", "_");
                         var existingClassification = transactions
-                            .FirstOrDefault(f => f.classification != null && string.Equals(f.classification.wiki_code,
-                                classification.wiki_code,
-                                StringComparison.InvariantCultureIgnoreCase))?.classification;
+                                                     .FirstOrDefault(f =>
+                                                         f.classification != null && string.Equals(f.classification.wiki_code,
+                                                             classification.wiki_code,
+                                                             StringComparison.InvariantCultureIgnoreCase))?.classification;
                         if (existingClassification != null)
                         {
                             transaction.classification = existingClassification;
@@ -178,7 +180,7 @@ namespace Investec.OpenBanking.RestClient.Services
                         {
                             classification.category = await LookupCategory(classification.wiki_code);
                         }
-                        
+
                         var categoryOverrides = classificationOverrides.Where(w =>
                             string.Equals(w.Lookup, "category", StringComparison.InvariantCultureIgnoreCase));
                         foreach (var item in categoryOverrides)
@@ -219,6 +221,7 @@ namespace Investec.OpenBanking.RestClient.Services
                         {
                             newValue = overrideModel.Replace;
                         }
+
                         break;
                 }
 
@@ -234,7 +237,6 @@ namespace Investec.OpenBanking.RestClient.Services
                             break;
                     }
                 }
-
             }
             catch (Exception e)
             {
