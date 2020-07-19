@@ -36,7 +36,7 @@ var latestTransactions = await _investecOpenBankingClient.GetAccountTransactions
 `Install-Package Lionelcc.Investec.OpenBanking`
 
 | NuGet Stable | NuGet Pre-release | Downloads |
-| ------- | ------------ | ----------------- | --------- | ----- |
+| ------------ | ----------------- | --------- |
 | [![Lionelcc.Investec.OpenBanking](https://img.shields.io/nuget/v/Lionelcc.Investec.OpenBanking.svg)](https://www.nuget.org/packages/Lionelcc.Investec.OpenBanking/) | [![Lionelcc.Investec.OpenBanking](https://img.shields.io/nuget/vpre/Lionelcc.Investec.OpenBanking.svg)](https://www.nuget.org/packages/Lionelcc.Investec.OpenBanking/) | [![Lionelcc.Investec.OpenBanking](https://img.shields.io/nuget/dt/Lionelcc.Investec.OpenBanking.svg)](https://www.nuget.org/packages/Lionelcc.Investec.OpenBanking/) |
 
 
