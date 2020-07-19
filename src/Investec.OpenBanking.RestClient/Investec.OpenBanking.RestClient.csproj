@@ -2,6 +2,29 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
+        <PackageId>Lionelcc.Investec.OpenBanking</PackageId>
+        <Title>Investec Open Banking Client library</Title>
+        <Authors>Lionel Christopher Chetty</Authors>
+        <Description>This client library enables client applications to connect to Investec's Open Banking aligned OpenAPIs. For more information, refer to https://developer.investec.com/programmable-banking/#open-api/.</Description>
+        <PackageProjectUrl>https://github.com/dalion619/investec-openbanking-dotnet</PackageProjectUrl>
+        <NeutralLanguage>en-ZA</NeutralLanguage>
+        <CurrnetDate>$([System.DateTime]::Now.ToString(yyyyMMdd))</CurrnetDate>
+        <PackageIconUrl>https://assets.gitlab-static.net/uploads/-/system/group/avatar/7268439/Zebra-10__1__copy.png</PackageIconUrl>
+        <RepositoryUrl>https://github.com/dalion619/investec-openbanking-dotnet.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>investec;openbanking;dotnetcore;netcore;netstandard</PackageTags>
+        <Company />
+        <Product>Investec Open Banking</Product>
+        <Version>1.0.3-preview</Version>
+        <PackageLicenseUrl>https://github.com/dalion619/investec-openbanking-dotnet/blob/master/LICENSE</PackageLicenseUrl>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DocumentationFile>bin\Debug\Investec.OpenBanking.RestClient.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DocumentationFile>bin\Release\Investec.OpenBanking.RestClient.xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="AngleSharp" Version="0.14.0" />
