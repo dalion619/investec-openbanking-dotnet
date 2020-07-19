@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,21 +63,12 @@ namespace Investec.OpenBanking.RestClient.Services
         /// </returns>
         public async Task<AccessTokenResponseModel> GetAccessToken()
         {
-            try
-            {
-                var authHeader =
-                    Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_options.ClientId}:{_options.ClientSecret}"));
-                var response = await _identityEndpoint.GetAccessToken($"Basic {authHeader}",
-                    (Dictionary<string, object>) new AccessTokenRequestModel(_options.Scopes)
-                        .ToDictionary());
-                return response;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-            }
-
-            return null;
+            var authHeader =
+                Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_options.ClientId}:{_options.ClientSecret}"));
+            var response = await _identityEndpoint.GetAccessToken($"Basic {authHeader}",
+                (Dictionary<string, object>) new AccessTokenRequestModel(_options.Scopes)
+                    .ToDictionary());
+            return response;
         }
 
         /// <summary>
@@ -89,19 +79,7 @@ namespace Investec.OpenBanking.RestClient.Services
         ///     Accounts Response Model
         ///     <see cref="Investec.OpenBanking.RestClient.ResponseModels.Accounts.AccountsResponseModel" />
         /// </returns>
-        public async Task<BaseResponseModel<AccountsResponseModel>> GetAccounts()
-        {
-            try
-            {
-                return await _accountsEndpoint.GetAccounts();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-            }
-
-            return new BaseResponseModel<AccountsResponseModel>(new AccountsResponseModel());
-        }
+        public async Task<BaseResponseModel<AccountsResponseModel>> GetAccounts() => await _accountsEndpoint.GetAccounts();
 
         /// <summary>
         ///     POST /za/pb/v1/accounts{accountId}/transactions
@@ -114,22 +92,13 @@ namespace Investec.OpenBanking.RestClient.Services
         /// </returns>
         public async Task<BaseResponseModel<AccountTransactionsResponseModel>> GetAccountTransactions(string accountId)
         {
-            try
+            var transactions = await _accountsEndpoint.GetTransactions(accountId);
+            if (_options.EnableTransactionClassification)
             {
-                var transactions = await _accountsEndpoint.GetTransactions(accountId);
-                if (_options.EnableTransactionClassification)
-                {
-                    transactions.data.transactions = await _classificationService.ClassifyTransactions(transactions.data.transactions);
-                }
-
-                return transactions;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
+                transactions.data.transactions = await _classificationService.ClassifyTransactions(transactions.data.transactions);
             }
 
-            return new BaseResponseModel<AccountTransactionsResponseModel>(new AccountTransactionsResponseModel());
+            return transactions;
         }
 
         /// <summary>
@@ -141,18 +110,7 @@ namespace Investec.OpenBanking.RestClient.Services
         ///     Account Balance Response
         ///     <see cref="Investec.OpenBanking.RestClient.ResponseModels.Accounts.AccountBalanceResponseModel" />
         /// </returns>
-        public async Task<BaseResponseModel<AccountBalanceResponseModel>> GetAccountBalance(string accountId)
-        {
-            try
-            {
-                return await _accountsEndpoint.GetBalance(accountId);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-            }
-
-            return new BaseResponseModel<AccountBalanceResponseModel>(new AccountBalanceResponseModel());
-        }
+        public async Task<BaseResponseModel<AccountBalanceResponseModel>> GetAccountBalance(string accountId) =>
+            await _accountsEndpoint.GetBalance(accountId);
     }
 }
