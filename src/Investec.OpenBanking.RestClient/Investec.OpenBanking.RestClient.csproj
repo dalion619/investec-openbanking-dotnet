@@ -15,7 +15,7 @@
         <PackageTags>investec;openbanking;dotnetcore;netcore;netstandard</PackageTags>
         <Company />
         <Product>Investec Open Banking</Product>
-        <Version>1.0.3-preview</Version>
+        <Version>1.0.4</Version>
         <PackageLicenseUrl>https://github.com/dalion619/investec-openbanking-dotnet/blob/master/LICENSE</PackageLicenseUrl>
     </PropertyGroup>
 
