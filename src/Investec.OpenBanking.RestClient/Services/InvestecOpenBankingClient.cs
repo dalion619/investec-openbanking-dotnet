@@ -86,13 +86,28 @@ namespace Investec.OpenBanking.RestClient.Services
         ///     Obtain a specified account's transactions.
         /// </summary>
         /// <param name="accountId">Account identifier</param>
+        /// <param name="from">Date to begin filtering transactions by, defaults to 180 days ago</param>
+        /// <param name="to">Date to end filtering transactions by, defaults to today</param>
         /// <returns>
         ///     Account Transactions Response
         ///     <see cref="Investec.OpenBanking.RestClient.ResponseModels.Accounts.AccountTransactionsResponseModel" />
         /// </returns>
-        public async Task<BaseResponseModel<AccountTransactionsResponseModel>> GetAccountTransactions(string accountId)
+        public async Task<BaseResponseModel<AccountTransactionsResponseModel>> GetAccountTransactions(
+            string accountId, DateTime? from = null, DateTime? to = null)
         {
-            var transactions = await _accountsEndpoint.GetTransactions(accountId);
+            var from_ISO8601 = "";
+            var to_ISO8601 = "";
+            if (from.HasValue)
+            {
+                from_ISO8601 = from.Value.ToString("o");
+            }
+
+            if (to.HasValue)
+            {
+                to_ISO8601 = to.Value.ToString("o");
+            }
+
+            var transactions = await _accountsEndpoint.GetTransactions(accountId, from_ISO8601, to_ISO8601);
             if (_options.EnableTransactionClassification)
             {
                 transactions.data.transactions = await _classificationService.ClassifyTransactions(transactions.data.transactions);

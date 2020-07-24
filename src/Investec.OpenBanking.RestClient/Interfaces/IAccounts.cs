@@ -13,7 +13,7 @@ namespace Investec.OpenBanking.RestClient.Interfaces
         Task<BaseResponseModel<AccountsResponseModel>> GetAccounts();
 
         [Get("/accounts/{accountId}/transactions")]
-        Task<BaseResponseModel<AccountTransactionsResponseModel>> GetTransactions(string accountId);
+        Task<BaseResponseModel<AccountTransactionsResponseModel>> GetTransactions(string accountId, string fromDate, string toDate);
 
         [Get("/accounts/{accountId}/balance")]
         Task<BaseResponseModel<AccountBalanceResponseModel>> GetBalance(string accountId);
