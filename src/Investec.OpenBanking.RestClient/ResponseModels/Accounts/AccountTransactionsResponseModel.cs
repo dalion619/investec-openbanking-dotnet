@@ -32,11 +32,13 @@ namespace Investec.OpenBanking.RestClient.ResponseModels.Accounts
             public string postingDate { get; set; }
             public string valueDate { get; set; }
             public string actionDate { get; set; }
+            public string transactionDate { get; set; }
             public TransactionClassification classification { get; set; }
             public decimal amount { get; set; }
             public DateTime postingDateTime => DateTime.Parse(postingDate);
             public DateTime valueDateTime => DateTime.Parse(valueDate);
             public DateTime actionDateTime => DateTime.Parse(actionDate);
+            public DateTime transactionDateTime => DateTime.Parse(transactionDate);
 
             public TransactionStatuses transactionStatus
             {
