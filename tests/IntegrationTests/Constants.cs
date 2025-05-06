@@ -4,5 +4,6 @@ namespace IntegrationTests
     {
         public static string ClientId => "";
         public static string ClientSecret => "";
+        public static string ApiKey => "";
     }
 }

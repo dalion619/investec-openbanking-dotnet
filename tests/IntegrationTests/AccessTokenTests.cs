@@ -12,7 +12,8 @@ namespace IntegrationTests
                 new InvestecOpenBankingClientOptions
                 {
                     ClientId = Constants.ClientId,
-                    ClientSecret = Constants.ClientSecret
+                    ClientSecret = Constants.ClientSecret,
+                    ApiKey = Constants.ApiKey
                 }, new ClassificationService());
 
         private readonly InvestecOpenBankingClient _investecOpenBankingClient;

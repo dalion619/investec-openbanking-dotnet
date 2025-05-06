@@ -65,7 +65,7 @@ namespace Investec.OpenBanking.RestClient.Services
         {
             var authHeader =
                 Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_options.ClientId}:{_options.ClientSecret}"));
-            var response = await _identityEndpoint.GetAccessToken($"Basic {authHeader}",
+            var response = await _identityEndpoint.GetAccessToken($"Basic {authHeader}", _options.ApiKey,
                 (Dictionary<string, object>) new AccessTokenRequestModel(_options.Scopes)
                     .ToDictionary());
             return response;

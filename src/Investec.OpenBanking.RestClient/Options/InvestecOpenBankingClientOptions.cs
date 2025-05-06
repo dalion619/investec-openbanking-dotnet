@@ -26,6 +26,11 @@ namespace Investec.OpenBanking.RestClient.Options
         public List<string> Scopes { get; set; }
 
         /// <summary>
+        ///     If not supplied, will default to 'accounts'
+        /// </summary>
+        public string ApiKey { get; set; } 
+        
+        /// <summary>
         ///     Enable transaction classification feature, defaults to false
         /// </summary>
         public bool EnableTransactionClassification { get; set; }
