@@ -9,6 +9,7 @@ namespace Investec.OpenBanking.RestClient.Interfaces
     {
         [Post("/identity/v2/oauth2/token")]
         Task<AccessTokenResponseModel> GetAccessToken([Header("Authorization")] string basicAuth,
+                                                      [Header("x-api-key")] string apiKey,
                                                       [Body(BodySerializationMethod.UrlEncoded)]
                                                       Dictionary<string, object> data);
     }
