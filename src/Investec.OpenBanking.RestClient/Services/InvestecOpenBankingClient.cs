@@ -9,6 +9,7 @@ using Investec.OpenBanking.RestClient.Options;
 using Investec.OpenBanking.RestClient.RequestModels;
 using Investec.OpenBanking.RestClient.ResponseModels;
 using Investec.OpenBanking.RestClient.ResponseModels.Accounts;
+using Investec.OpenBanking.RestClient.ResponseModels.Cards;
 using Microsoft.Extensions.Options;
 using Refit;
 
@@ -20,7 +21,8 @@ namespace Investec.OpenBanking.RestClient.Services
     public class InvestecOpenBankingClient : IInvestecOpenBankingClient
     {
         private readonly IClassificationService _classificationService;
-        private readonly HttpClient _httpClient;
+        private readonly HttpClient _pbHttpClient;
+        private readonly HttpClient _cardHttpClient;
         private readonly InvestecOpenBankingClientOptions _options;
 
         public InvestecOpenBankingClient(IOptions<InvestecOpenBankingClientOptions> optionsAccessor,
@@ -33,15 +35,22 @@ namespace Investec.OpenBanking.RestClient.Services
 
             _options = optionsAccessor.Value;
             _classificationService = classificationService;
-            _httpClient = new HttpClient(
-                              new AuthenticatedHttpClientHandler(GetAccessToken))
-                          {
-                              Timeout = TimeSpan.FromMinutes(1),
-                              BaseAddress = new Uri(InvestecOpenBankingClientConstants.ApiUrl)
-                          };
+            _pbHttpClient = new HttpClient(
+                new AuthenticatedHttpClientHandler(GetAccessToken))
+            {
+                Timeout = TimeSpan.FromMinutes(1),
+                BaseAddress = new Uri(InvestecOpenBankingClientConstants.PrivateBankingApiUrl)
+            };
+            _cardHttpClient = new HttpClient(
+                new AuthenticatedHttpClientHandler(GetAccessToken))
+            {
+                Timeout = TimeSpan.FromMinutes(1),
+                BaseAddress = new Uri(InvestecOpenBankingClientConstants.ApiUrl)
+            };
 
             _identityEndpoint = RestService.For<IIdentity>(InvestecOpenBankingClientConstants.BaseUrl);
-            _accountsEndpoint = RestService.For<IAccounts>(_httpClient);
+            _accountsEndpoint = RestService.For<IAccounts>(_pbHttpClient);
+            _cardsEndpoint = RestService.For<ICards>(_cardHttpClient);
         }
 
         /// <summary>
@@ -53,6 +62,11 @@ namespace Investec.OpenBanking.RestClient.Services
         ///     /za/pb/v1/accounts
         /// </summary>
         private IAccounts _accountsEndpoint { get; }
+        
+        /// <summary>
+        ///     /za/v1/cards
+        /// </summary>
+        private ICards _cardsEndpoint { get; }
 
         /// <summary>
         ///     POST /identity/v2/oauth2/token
@@ -70,9 +84,19 @@ namespace Investec.OpenBanking.RestClient.Services
                     .ToDictionary());
             return response;
         }
+        
+        /// <summary>
+        ///     GET /za/v1/cards
+        ///     Obtain a list of cards.
+        /// </summary>
+        /// <returns>
+        ///     Cards Response Model
+        ///     <see cref="Investec.OpenBanking.RestClient.ResponseModels.Cards.CardsResponseModel" />
+        /// </returns>
+        public async Task<BaseResponseModel<CardsResponseModel>> GetCards() => await _cardsEndpoint.GetCards();
 
         /// <summary>
-        ///     POST /za/pb/v1/accounts
+        ///     GET /za/pb/v1/accounts
         ///     Obtain a list of accounts.
         /// </summary>
         /// <returns>
@@ -82,7 +106,7 @@ namespace Investec.OpenBanking.RestClient.Services
         public async Task<BaseResponseModel<AccountsResponseModel>> GetAccounts() => await _accountsEndpoint.GetAccounts();
 
         /// <summary>
-        ///     POST /za/pb/v1/accounts{accountId}/transactions
+        ///     GET /za/pb/v1/accounts{accountId}/transactions
         ///     Obtain a specified account's transactions.
         /// </summary>
         /// <param name="accountId">Account identifier</param>
@@ -117,7 +141,7 @@ namespace Investec.OpenBanking.RestClient.Services
         }
 
         /// <summary>
-        ///     POST /za/pb/v1/accounts{accountId}/balance
+        ///     GET /za/pb/v1/accounts{accountId}/balance
         ///     Obtain a specified account's balance.
         /// </summary>
         /// <param name="accountId">Account identifier</param>
