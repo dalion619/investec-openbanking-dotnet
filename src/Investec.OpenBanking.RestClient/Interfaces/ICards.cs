@@ -10,5 +10,8 @@ namespace Investec.OpenBanking.RestClient.Interfaces
     {
         [Get("/cards")]
         Task<BaseResponseModel<CardsResponseModel>> GetCards();
+        
+        [Get("/cards/{cardKey}")]
+        Task<BaseResponseModel<CardResponseModel>> GetCard(string cardKey);
     }
 }

@@ -94,6 +94,16 @@ namespace Investec.OpenBanking.RestClient.Services
         ///     <see cref="Investec.OpenBanking.RestClient.ResponseModels.Cards.CardsResponseModel" />
         /// </returns>
         public async Task<BaseResponseModel<CardsResponseModel>> GetCards() => await _cardsEndpoint.GetCards();
+        
+        /// <summary>
+        ///     GET /za/v1/cards/{cardKey}
+        ///     Obtain a a specified card.
+        /// </summary>
+        /// <returns>
+        ///     Card Response Model
+        ///     <see cref="Investec.OpenBanking.RestClient.ResponseModels.Cards.CardResponseModel" />
+        /// </returns>
+        public async Task<BaseResponseModel<CardResponseModel>> GetCard(string cardKey) => await _cardsEndpoint.GetCard(cardKey);
 
         /// <summary>
         ///     GET /za/pb/v1/accounts

@@ -12,7 +12,6 @@ namespace Investec.OpenBanking.RestClient.ResponseModels.Cards
             public string CardNumber { get; set; }
             public bool IsProgrammable { get; set; }
             public string Status { get; set; }
-
             public string CardType
             {
                 get
